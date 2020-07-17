@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-AppAttendance-FACC7CBF-792B-4BCC-80C2-D17153E6CA0D</UserSecretsId>
+    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20200717090744_InitialAppDbContext.cs" />
+    <Compile Remove="Data\Migrations\20200717090744_InitialAppDbContext.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200717091154_InitialAppDbContext.cs" />
+    <Compile Remove="Data\Migrations\20200717091154_InitialAppDbContext.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200717091642_InitialAppDbContext.cs" />
+    <Compile Remove="Data\Migrations\20200717091642_InitialAppDbContext.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200717092618_InitialAppDbContext.cs" />
+    <Compile Remove="Data\Migrations\20200717092618_InitialAppDbContext.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200717093052_InitialAppDbContext.cs" />
+    <Compile Remove="Data\Migrations\20200717093052_InitialAppDbContext.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
+</Project>
