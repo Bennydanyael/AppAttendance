@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AppAttendance.Models.Field.Attendances
+namespace AppAttendance.Models
 {
-    [Table("InputByType")]
-    public class InputByType
+    public class Wilayah
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int InputByID { get; set; }
-        public string InputByName { get; set; }
+        public int Kd_wilayah { get; set; }
+        public string Nama_Wilayah { get; set; }
     }
 }
