@@ -19,7 +19,7 @@ namespace AppAttendance.Data
         public DbSet<Pengurus> Pengurus { get; set; }
 
         //Employee
-        public DbSet<Anggota> ANggota { get; set; }
+        public DbSet<Anggota> Anggota{ get; set; }
         
         //Attendances
         public DbSet<Absensi> Absensi { get; set; }

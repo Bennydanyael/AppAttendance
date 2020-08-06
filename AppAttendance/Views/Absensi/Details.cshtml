@@ -1,0 +1,48 @@
+﻿@model AppAttendance.Models.Absensi
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Absensi</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Anggota)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Anggota.Nama)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Wilayah)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Wilayah.Nama_Wilayah)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Keterangan)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Keterangan)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tanggal)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tanggal)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Selesai)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Selesai)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Kd_absen">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

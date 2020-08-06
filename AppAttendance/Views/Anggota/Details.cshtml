@@ -1,0 +1,45 @@
+﻿@model AppAttendance.Models.Anggota
+
+@{
+    ViewData["Title"] = "Details Anggota";
+}
+<div>
+    <h4>Anggota</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nama)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nama)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tgl_lahir)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tgl_lahir)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Alamat)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Alamat)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Wilayah)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Wilayah.Nama_Wilayah)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Pengurus.Username)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Pengurus.Username)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Kd_anggota">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

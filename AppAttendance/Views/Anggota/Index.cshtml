@@ -1,0 +1,56 @@
+﻿@model IEnumerable<AppAttendance.Models.Anggota>
+
+@{
+    ViewData["Title"] = "Anggota";
+}
+<p>
+    <a asp-action="Create">Anggota Baru</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nama)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tgl_lahir)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Alamat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Wilayah)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pengurus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nama)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tgl_lahir)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Alamat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Wilayah.Nama_Wilayah)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pengurus.Username)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Kd_anggota">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Kd_anggota">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Kd_anggota">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

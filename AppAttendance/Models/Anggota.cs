@@ -22,10 +22,13 @@ namespace AppAttendance.Models
         
         public string Alamat { get; set; }
 
-        public int Kd_Wilayah { get; set; }
+        [Display(Name ="Wilayah")]
+        public int Kd_wilayah { get; set; }
+        [ForeignKey("Kd_wilayah")]
+        public virtual Wilayah Wilayah { get; set; }
 
-
-        public int Id_Pengurus { get; set; }
+        [Display(Name ="Pengurus")]
+        public int IdPengurus { get; set; }
         [ForeignKey("IdPengurus")]
         public virtual Pengurus Pengurus { get; set; }
     }

@@ -19,7 +19,8 @@ namespace AppAttendance.Models
         [ForeignKey("Kd_anggota")]
         public virtual Anggota Anggota { get; set; }
 
-        public int Kd_Wilayah { get; set; }
+        [Display(Name ="Wilayah")]
+        public int Kd_wilayah { get; set; }
         [ForeignKey("Kd_wilayah")]
         public virtual Wilayah Wilayah { get; set; }
         
