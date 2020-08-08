@@ -7,12 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AppAttendance.Data;
 using AppAttendance.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 
 namespace AppAttendance.Controllers
 {
     public class PengurusController : Controller
     {
         private readonly AppDbContext _context;
+        [BindProperty]
+        public Pengurus _pengurus{ get; set; }
 
         public PengurusController(AppDbContext context)
         {
@@ -23,6 +29,43 @@ namespace AppAttendance.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Pengurus.ToListAsync());
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> Logout()
+        //{
+        //    await _signManager.SignOutAsync();
+        //    return RedirectToAction("Index", "Home");
+        //}
+        public async Task<ActionResult> Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Login(Pengurus model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userdetails = await _context.Pengurus.SingleOrDefaultAsync(m => m.Username == model.Username && m.Passwords == model.Passwords);
+                if (userdetails == null)
+                {
+                    ModelState.AddModelError("Password", "Invalid login attempt.");
+                    return View("Login");
+                }
+                HttpContext.Session.SetString("IdPengurus", userdetails.Username);
+                return RedirectToAction("Index", "Absensi");
+            }
+            else
+            {
+                return View("Login");
+            }
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return View("Index");
         }
 
         // GET: Pengurus/Details/5
@@ -102,7 +145,7 @@ namespace AppAttendance.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PengurusExists(pengurus.IdPengurus))
+                    if (!PengurusExists(pengurus.Username))
                     {
                         return NotFound();
                     }
@@ -145,9 +188,9 @@ namespace AppAttendance.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PengurusExists(int id)
+        private bool PengurusExists(string _username)
         {
-            return _context.Pengurus.Any(e => e.IdPengurus == id);
+            return _context.Pengurus.Any(e => e.Username == _username);
         }
     }
 }

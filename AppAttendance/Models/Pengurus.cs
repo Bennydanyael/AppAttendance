@@ -12,7 +12,9 @@ namespace AppAttendance.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int IdPengurus { get; set; }
+        [Required]
         public string Username { get; set; }
+        [Required, DataType(DataType.Password)]
         public string Passwords { get; set; }
     }
 }
