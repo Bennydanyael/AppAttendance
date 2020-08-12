@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using AppAttendance.Data;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
+
+using AppAttendance.Services.Users;
 
 namespace AppAttendance
 {
@@ -31,16 +28,15 @@ namespace AppAttendance
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
 
             services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
-            services.AddDefaultIdentity<IdentityUser>(options => 
-            options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+            services.AddSession();
 
             services.AddAuthentication(options =>
             {
@@ -49,15 +45,21 @@ namespace AppAttendance
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddCookie(options =>
             {
-                options.LoginPath = new PathString("/Index");
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5.0);
+                //options.Cookie.Domain = "https://localhost:44356";
+                //options.Cookie.Name = "Token123";
+                //options.Cookie.Path = "/";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.LoginPath = new PathString("/Pengurus/Login");
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
             });
 
-            // [Asma Khalid]: Authorization settings.  
+            services.AddHttpContextAccessor();
+            services.AddTransient<IUsers, User>();
+
             services.AddMvc().AddRazorPagesOptions(options =>
             {
-                options.Conventions.AuthorizeFolder("/");
-                options.Conventions.AllowAnonymousToPage("/Index");
+                options.Conventions.AuthorizeFolder("/Pengurus");
+                options.Conventions.AllowAnonymousToPage("/Pengurus/Login");
             });
         }
 
@@ -77,11 +79,12 @@ namespace AppAttendance
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            
             app.UseRouting();
-
+            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

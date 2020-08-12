@@ -1,8 +1,8 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+﻿@model AppAttendance.Controllers.PengurusController
 
-@if (SignInManager.IsSignedIn(User))
+@using Microsoft.AspNetCore.Http;
+
+@if (@Context.User.Identity.IsAuthenticated)
 {
     <ul class="nav navbar-nav flex-grow-1">
         <li class="presentation">
@@ -18,20 +18,26 @@
             <a class=" glyphicon glyphicon-calendar" asp-area="" asp-controller="Wilayah" asp-action="Index"> Wilayah</a>
         </li>
     </ul>
-    
+
     <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown-header">
-            <a class="glyphicon glyphicon-cog" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
-        </li>
-        <form class="form-inline" asp-area="" asp-page="/Home" asp-route-returnUrl="@Url.Action("Logout", "Pengurus", new { area = "" })">
-            <button type="submit" class="glyphicon glyphicon-log-out"> Logout</button>
+        <li class="persentation"><a asp-area="" asp-page="" title="manage"> @Context.Session.GetString("IdPengurus")</a></li>
+        @*<li class="persentation"><a class="glyphicon glyphicon-user" asp-area="" asp-controller="Pengurus" asp-action="Create"> Register</a></li>
+        <li class="presentation"><a class="glyphicon glyphicon-log-out" asp-area="" asp-controller="Pengurus" asp-action="Logout"> Logout</a></li>*@
+        <li class="persentation"> <a>
+        <form asp-controller="Pengurus" asp-action="Logout" method="post">
+            <input type="submit" value="Logout" />
         </form>
+            </a>
+        </li>
     </ul>
 }
 else
 {
 <ul class="nav navbar-nav navbar-right">
-    <li class="persentation"><a class="glyphicon glyphicon-user" asp-area="Identity" asp-page="/Account/Register"> Register</a></li>
     <li class="presentation"><a class="glyphicon glyphicon-log-in" asp-area="" asp-controller="Pengurus" asp-action="Login"> Login</a></li>
+    @*<li class="persentation"><a class="glyphicon glyphicon-user" asp-area="" asp-controller="Pengurus" asp-action="Create"> Register</a></li>
+    <li class="dropdown-header">
+            <p class="glyphicon glyphicon-cog" asp-area="" asp-page="#" title="Manage">@Context.User.Identity.Name</p>
+        </li>*@
 </ul>
 }

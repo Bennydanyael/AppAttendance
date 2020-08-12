@@ -8,10 +8,11 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="jumbotron">
+            @ViewBag.Error
             <form role="form" asp-action="Login" asp-controller="Pengurus" method="post">
                 <div class="form-group">
                     <label for="Username">Username</label>
-                    <input type="text" name="Username" asp-for="Username" autocomplete="off" class="form-control input-sm" placeholder="Username">
+                    <input type="text" name="Username" asp-for="Username" autocomplete="on" class="form-control input-sm" placeholder="Username">
                     <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -23,5 +24,8 @@
             </form>
         </div>
     </div>
-
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}  

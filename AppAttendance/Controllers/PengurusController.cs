@@ -11,32 +11,27 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AppAttendance.Controllers
 {
     public class PengurusController : Controller
     {
         private readonly AppDbContext _context;
-        [BindProperty]
-        public Pengurus _pengurus{ get; set; }
 
         public PengurusController(AppDbContext context)
         {
             _context = context;
         }
 
+        [Authorize]
         // GET: Pengurus
         public async Task<IActionResult> Index()
         {
             return View(await _context.Pengurus.ToListAsync());
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Logout()
-        //{
-        //    await _signManager.SignOutAsync();
-        //    return RedirectToAction("Index", "Home");
-        //}
+        [AllowAnonymous]
         public async Task<ActionResult> Login()
         {
             return View();
@@ -45,27 +40,54 @@ namespace AppAttendance.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(Pengurus model)
         {
-            if (ModelState.IsValid)
+            bool _isUserValid = false;
+            if(User != null)
+            {
+                _isUserValid = true;
+            }
+
+            if (ModelState.IsValid && _isUserValid)
             {
                 var userdetails = await _context.Pengurus.SingleOrDefaultAsync(m => m.Username == model.Username && m.Passwords == model.Passwords);
                 if (userdetails == null)
                 {
                     ModelState.AddModelError("Password", "Invalid login attempt.");
+                    ViewBag.error = "Invalid login attempt.";
                     return View("Login");
                 }
                 HttpContext.Session.SetString("IdPengurus", userdetails.Username);
-                return RedirectToAction("Index", "Absensi");
+                //bool _isActive = HttpContext.Session.IsAvailable;
+                //HttpContext.Session.SetString("_isActive", _isActive.ToString());
+
+                var _claims = new List<Claim>();
+                _claims.Add(new Claim(ClaimTypes.Name, userdetails.Username));
+
+                var claimsIdentity = new ClaimsIdentity(_claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        AllowRefresh = true,
+                        ExpiresUtc = DateTime.UtcNow.AddMinutes(20)
+                    });
+                return RedirectToAction("Index", "Home");
             }
             else
             {
+                ViewBag.error = "Invalid User";
                 return View("Login");
             }
         }
 
+        [HttpPost]
         public IActionResult Logout()
         {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();
+            HttpContext.Session.Remove(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Clear();
-            return View("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Pengurus/Details/5
@@ -86,6 +108,7 @@ namespace AppAttendance.Controllers
             return View(pengurus);
         }
 
+        [Authorize]
         // GET: Pengurus/Create
         public IActionResult Create()
         {
