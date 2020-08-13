@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using AppAttendance.Data;
+using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 using AppAttendance.Services.Users;
+using System.Linq;
 
 namespace AppAttendance
 {
@@ -33,10 +35,17 @@ namespace AppAttendance
             });
 
             services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            
+
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+            //services.AddIdentity<IdentityOptions, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
+            services.AddScoped<ClaimsPrincipal, ClaimsPrincipal>();
+
+            services.AddMvc();
             services.AddSession();
+            services.AddAuthentication();
+            services.AddAuthorization();
 
             services.AddAuthentication(options =>
             {
@@ -61,6 +70,11 @@ namespace AppAttendance
                 options.Conventions.AuthorizeFolder("/Pengurus");
                 options.Conventions.AllowAnonymousToPage("/Pengurus/Login");
             });
+
+            //services.Configure<IdentityOptions>(_options =>
+            //{
+            //    _options.ClaimsIdentity.UserNameClaimType = 
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,9 +97,8 @@ namespace AppAttendance
             app.UseRouting();
             app.UseCookiePolicy();
             app.UseAuthentication();
-            app.UseAuthorization();
             app.UseSession();
-
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

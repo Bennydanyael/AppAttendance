@@ -20,7 +20,7 @@
     </ul>
 
     <ul class="nav navbar-nav navbar-right">
-        <li class="persentation"><a asp-area="" asp-page="" title="manage"> @Context.Session.GetString("IdPengurus")</a></li>
+        <li class="persentation"><a asp-area="" asp-page="" title="manage"> @Context.User.Identity.Name</a></li>
         @*<li class="persentation"><a class="glyphicon glyphicon-user" asp-area="" asp-controller="Pengurus" asp-action="Create"> Register</a></li>
         <li class="presentation"><a class="glyphicon glyphicon-log-out" asp-area="" asp-controller="Pengurus" asp-action="Logout"> Logout</a></li>*@
         <li class="persentation"> <a>

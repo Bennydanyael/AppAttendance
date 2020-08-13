@@ -20,7 +20,6 @@ namespace AppAttendance.Controllers
             _context = context;
         }
 
-        [Authorize]
         // GET: Absensi
         public async Task<IActionResult> Index()
         {
@@ -48,7 +47,6 @@ namespace AppAttendance.Controllers
             return View(absensi);
         }
 
-        [Authorize]
         // GET: Absensi/Create
         public IActionResult Create()
         {
@@ -75,7 +73,6 @@ namespace AppAttendance.Controllers
             return View(absensi);
         }
 
-        [Authorize]
         // GET: Absensi/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -131,7 +128,6 @@ namespace AppAttendance.Controllers
             return View(absensi);
         }
 
-        [Authorize]
         // GET: Absensi/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

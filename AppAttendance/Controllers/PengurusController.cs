@@ -18,16 +18,18 @@ namespace AppAttendance.Controllers
     public class PengurusController : Controller
     {
         private readonly AppDbContext _context;
-
-        public PengurusController(AppDbContext context)
+        private readonly HttpContext httpContext;
+        public Pengurus Pengurus { get; set; }
+        public PengurusController(AppDbContext context, IHttpContextAccessor contextAccessor)
         {
             _context = context;
+            httpContext = contextAccessor.HttpContext;
         }
 
-        [Authorize]
         // GET: Pengurus
         public async Task<IActionResult> Index()
         {
+            ClaimsPrincipal _cp = this.httpContext?.User;
             return View(await _context.Pengurus.ToListAsync());
         }
 
@@ -61,11 +63,12 @@ namespace AppAttendance.Controllers
 
                 var _claims = new List<Claim>();
                 _claims.Add(new Claim(ClaimTypes.Name, userdetails.Username));
+                _claims.Add(new Claim(ClaimTypes.NameIdentifier, userdetails.Username));
 
                 var claimsIdentity = new ClaimsIdentity(_claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity),
+                    new ClaimsPrincipal((System.Security.Principal.IIdentity)claimsIdentity.Claims.ToList()),
                     new AuthenticationProperties
                     {
                         IsPersistent = true,
@@ -108,7 +111,6 @@ namespace AppAttendance.Controllers
             return View(pengurus);
         }
 
-        [Authorize]
         // GET: Pengurus/Create
         public IActionResult Create()
         {
