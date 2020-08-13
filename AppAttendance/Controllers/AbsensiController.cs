@@ -20,6 +20,7 @@ namespace AppAttendance.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: Absensi
         public async Task<IActionResult> Index()
         {
@@ -47,6 +48,7 @@ namespace AppAttendance.Controllers
             return View(absensi);
         }
 
+        [Authorize]
         // GET: Absensi/Create
         public IActionResult Create()
         {

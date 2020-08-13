@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AppAttendance.Data;
 using AppAttendance.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AppAttendance.Controllers
 {
@@ -19,6 +20,7 @@ namespace AppAttendance.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: Wilayah
         public async Task<IActionResult> Index()
         {
@@ -43,6 +45,7 @@ namespace AppAttendance.Controllers
             return View(wilayah);
         }
 
+        [Authorize]
         // GET: Wilayah/Create
         public IActionResult Create()
         {

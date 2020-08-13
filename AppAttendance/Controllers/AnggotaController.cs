@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using AppAttendance.Data;
 using AppAttendance.Models;
 
@@ -19,6 +20,7 @@ namespace AppAttendance.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: Anggota
         public async Task<IActionResult> Index()
         {
@@ -45,6 +47,7 @@ namespace AppAttendance.Controllers
             return View(anggota);
         }
 
+        [Authorize]
         // GET: Anggota/Create
         public IActionResult Create()
         {
