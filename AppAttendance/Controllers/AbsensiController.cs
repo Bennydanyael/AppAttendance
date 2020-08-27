@@ -22,10 +22,32 @@ namespace AppAttendance.Controllers
 
         [Authorize]
         // GET: Absensi
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string _sortDate)
         {
+
+
             var appDbContext = _context.Absensi.Include(a => a.Anggota).Include(a => a.Wilayah);
             return View(await appDbContext.ToListAsync());
+        }
+
+        public async Task<IActionResult> History(string SearchString, string SearchDate)
+        {
+            ViewData["CurrentFilter"] = SearchString;
+            ViewData["CurrentDate"] = SearchDate;
+
+            var _absen = from s in _context.Absensi.Include(a => a.Anggota).Include(a => a.Wilayah) select s;
+
+            if (!String.IsNullOrEmpty(SearchString))
+            {
+                _absen = _absen.Where(s => s.Anggota.Nama.Contains(SearchString) || s.Wilayah.Nama_Wilayah.Contains(SearchString));
+            }
+
+            if (!String.IsNullOrEmpty(SearchDate))
+            {
+                _absen = _absen.Where(s => s.Tanggal.ToString().ToLower().Contains(SearchDate.ToLower()));
+            }
+
+            return View(await _absen.AsNoTracking().ToListAsync());
         }
 
         // GET: Absensi/Details/5
