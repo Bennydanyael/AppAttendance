@@ -24,10 +24,20 @@ namespace AppAttendance.Controllers
         // GET: Absensi
         public async Task<IActionResult> Index(string _sortDate)
         {
+            ViewData["DateSortParm"] = _sortDate == "Date" ? "date_desc" : "Date";
+            var appDbContext = from a in _context.Absensi.Include(a => a.Anggota).Include(a => a.Wilayah) select a;
 
+            switch (_sortDate)
+            {
+                default:
+                    appDbContext = appDbContext.OrderBy(s => s.Tanggal);
+                    break;
+                case "date_desc":
+                    appDbContext = appDbContext.OrderByDescending(s => s.Tanggal);
+                    break;
+            }
 
-            var appDbContext = _context.Absensi.Include(a => a.Anggota).Include(a => a.Wilayah);
-            return View(await appDbContext.ToListAsync());
+            return View(await appDbContext.AsNoTracking().ToListAsync());
         }
 
         public async Task<IActionResult> History(string SearchString, string SearchDate)
